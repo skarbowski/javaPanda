@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pl.pandait.panda.HelloControllerTest" time="2.614" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pl.pandait.panda.HelloControllerTest" time="0.854" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.13+8-Ubuntu-0ubuntu1.18.04"/>
@@ -59,5 +59,5 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase name="whenGivenAttributeNameThenItIsInModel" classname="pl.pandait.panda.HelloControllerTest" time="2.611"/>
+  <testcase name="whenGivenAttributeNameThenItIsInModel" classname="pl.pandait.panda.HelloControllerTest" time="0.853"/>
 </testsuite>
