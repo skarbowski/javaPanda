@@ -88,10 +88,7 @@ pipeline {
              } 
         } 
     }
-    
-    
     post {
-
         success {
             sh 'docker stop pandaapp'
             deleteDir()
@@ -104,7 +101,7 @@ pipeline {
             }
             sh 'docker stop pandaapp'
             deleteDir()
+            }
         }
-    }
     }
 }
