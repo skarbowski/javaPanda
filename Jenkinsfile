@@ -86,9 +86,9 @@ pipeline {
                  } 
              } 
         } 
-    } 
-    
     }
+    
+    
     post {
 
         success {
@@ -105,3 +105,4 @@ pipeline {
             deleteDir()
         }
     }
+}
