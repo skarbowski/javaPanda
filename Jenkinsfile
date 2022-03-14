@@ -46,7 +46,7 @@ pipeline {
         //    steps {
         //        sh "mvn test -Pselenium"
         //    }
-        }
+        //}
         stage('Deploy jar to artifactory') {
             steps {
                 configFileProvider([configFile(fileId: '9d1ed313-ea70-4fa9-9934-7108c53eca75', variable: 'MAVEN_GLOBAL_SETTINGS')]) {
