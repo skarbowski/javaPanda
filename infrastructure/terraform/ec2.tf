@@ -1,6 +1,6 @@
 resource "aws_instance" "panda" {
   count                     = length(var.availability_zones)
-  ami                       = "ami-0885b1f6bd170450c"
+  ami                       = "ami-042e8287309f5df03"
   instance_type             = "t2.micro"
   availability_zone         = var.availability_zones[count.index] 
   key_name                  = var.aws_key_name
@@ -12,14 +12,6 @@ resource "aws_instance" "panda" {
     type        = "ssh"
     user        = "ubuntu"
     private_key = file(var.ssh_key_path)
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "echo \"Hello, World ${self.public_ip}\" > index.html",
-      "nohup busybox httpd -f -p 8080 &",
-      "sleep 1",
-    ]
   }
 }
 

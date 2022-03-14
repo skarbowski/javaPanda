@@ -42,10 +42,10 @@ pipeline {
                 sh "docker run -d -p 0.0.0.0:8080:8080 --name pandaapp -t ${IMAGE}:${VERSION}"
             }
         }
-        stage('Test Selenium') {
-            steps {
-                sh "mvn test -Pselenium"
-            }
+        //stage('Test Selenium') {
+        //    steps {
+        //        sh "mvn test -Pselenium"
+        //    }
         }
         stage('Deploy jar to artifactory') {
             steps {
@@ -56,13 +56,17 @@ pipeline {
         }
         stage('Run terraform') {
             steps {
-                dir('infrastructure/terraform') {                
+                dir('infrastructure/terraform') {      
+                    withCredentials([file(credentialsId: 'aws_key', variable: 'terraformpanda')]) { sh "cp \$terraformpanda ../panda.pem" } 
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'panda']]) {
                     sh 'terraform init && terraform apply -var-file ./panda.tfvars -auto-approve '
-                } 
+                    } 
+                }
             }
         }
         stage('Copy Ansible role') {
                steps {
+                   sh 'sleep 180'
                    sh 'cp -r infrastructure/ansible/panda/ /etc/ansible/roles/'
                 }
         }
@@ -70,13 +74,33 @@ pipeline {
                steps {
                 dir('infrastructure/ansible') {                
                     sh 'chmod 600 ../panda.pem'
-                    sh 'ansible-playbook -i ./inventory playbook.yml'
+                    sh 'ansible-playbook -i ./inventory playbook.yml -e ansible_python_interpreter=/usr/bin/python3'
                 } 
             }
         }
+        stage('Remove environment') { 
+            steps {
+                 input 'Remove environment' dir('infrastructure/terraform') { 
+                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
+                 sh 'terraform destroy -auto-approve -var-file panda.tfvars' 
+                 } 
+             } 
+        } 
+    } 
+    
     }
-    post { 
-        always { 
+    post {
+
+        success {
+            sh 'docker stop pandaapp'
+            deleteDir()
+        }
+        failure {
+            dir('infrastructure/terraform') { 
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws']]) {
+                    sh 'terraform destroy -auto-approve -var-file panda.tfvars'
+                }
+            }
             sh 'docker stop pandaapp'
             deleteDir()
         }
